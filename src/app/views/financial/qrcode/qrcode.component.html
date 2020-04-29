@@ -1,0 +1,11 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<mat-card class="text-center">
+    <button mat-raised-button color="accent" routerLink="/shop">Go Back To Shop</button>
+</mat-card>
+<div style="text-align:center">
+    <ngx-qrcode class="qrcode" *ngIf="display" id="qrCodeImage" [qrc-element-type]="elementType" [qrc-value]="value">
+    </ngx-qrcode><br>
+    <mat-card class="text-center">
+        <a mat-raised-button color="accent" [href]="href" *ngIf="display" (click)="downloadImage()" download>Download QRCode</a>
+    </mat-card>
+</div>

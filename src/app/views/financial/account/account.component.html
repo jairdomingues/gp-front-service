@@ -1,0 +1,74 @@
+<div fxFlex="100" [@animate]="{value:'*',params:{delay:'400ms',scale:'.9'}}">
+    <div class="example-button-row m-333">
+      <button mat-raised-button class="mb-05" (click)="openPopUp({'type': 'account'})">Conta Digital</button>
+      <button mat-raised-button color="primary" class="mb-05" (click)="openPopUp({'type': 'crypto'})">Crypto</button>
+      <button mat-raised-button color="accent" class="mb-05" (click)="openPopUp({'type': 'credit'})">Cartão Crédito</button>
+    </div>
+    <mat-card *ngIf="accounts.length === 0">Nanhuma conta foi encontrada.</mat-card>
+    <mat-accordion multi="false" *ngIf="accounts.length > 0">
+      <mat-expansion-panel *ngFor="let c of accounts">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{c.name | uppercase}} - {{c.balance | currency:'BRL'}}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="border-bottom pb-1 mb-1" *ngIf="c.bankCode">
+            <div fxLyout="row wrap" class="text-blue font-weight-bold">
+              <span>Banco: {{c.bankCode}}</span>
+              <span fxFlex></span>
+              <span>Agencia: {{c.agency}}</span>
+            </div>
+            <div fxLyout="row wrap" class="text-blue font-weight-bold">
+              <span>Conta corrente: {{c.currentAccount}}</span>
+              <span fxFlex></span>
+            </div>
+            <div fxLyout="row wrap" class="text-muted">
+              <small>{{c.createDate |  date: 'dd/MM hh:mm: a'}} </small>
+              <span fxFlex></span>
+              <small class="text-green">{{c.lastBalance | currency:'BRL'}}</small>
+            </div>
+        </div>
+        <div class="border-bottom pb-1 mb-1" *ngIf="c.hashCard">
+          <div fxLyout="row wrap" class="text-blue font-weight-bold">
+            <span>Hash Card: {{c.hashCard}}</span>
+            <span fxFlex></span>
+          </div>
+          <div fxLyout="row wrap" class="text-muted">
+            <small>{{c.createDate |  date: 'dd/MM hh:mm: a'}} </small>
+            <span fxFlex></span>
+            <small class="text-green">{{c.lastBalance | currency:'BRL'}}</small>
+          </div>
+        </div>
+        <div class="border-bottom pb-1 mb-1" *ngIf="c.cardNumber">
+          <div fxLyout="row wrap" class="text-blue font-weight-bold">
+            <span>Name: {{c.name}}</span>
+            <span fxFlex></span>
+            <span>Brand: {{c.brand}}</span>
+          </div>
+          <div fxLyout="row wrap" class="text-blue font-weight-bold">
+            <span>Holder Name: {{c.cardholderName}}</span>
+            <span fxFlex></span>
+            <span>Card Number: {{c.cardNumber}}</span>
+          </div>
+          <div fxLyout="row wrap" class="text-blue font-weight-bold">
+            <span>Month: {{c.expirationMonth}}</span>
+            <span fxFlex></span>
+            <span>Year: {{c.expirationYear}}</span>
+          </div>
+          <div fxLyout="row wrap" class="text-blue font-weight-bold">
+            <span>CCV: {{c.securityCode}}</span>
+            <span fxFlex></span>
+          </div>
+          <div fxLyout="row wrap" class="text-muted">
+            <small>{{c.createDate |  date: 'dd/MM hh:mm: a'}} </small>
+            <span fxFlex></span>
+            <small class="text-green">{{c.lastBalance | currency:'BRL'}}</small>
+          </div>
+        </div>
+        <div class="m-333">
+          <!-- <span fxFlex></span> -->
+          <button mat-raised-button class="mb-05" color="primary" (click)="deleteItem(c)">Delete ACCOUNT</button>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>

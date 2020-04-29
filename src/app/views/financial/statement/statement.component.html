@@ -1,0 +1,24 @@
+<div fxFlex="100" [@animate]="{value:'*',params:{delay:'400ms',scale:'.9'}}">
+  <mat-card *ngIf="accounts.length === 0">Nenhuma conta foi encontrada.</mat-card>
+    <mat-accordion multi="false" *ngIf="accounts.length > 0">
+      <mat-expansion-panel *ngFor="let c of accounts" >
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{c.name | uppercase}} - {{c.balance | currency:'BRL'}}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="border-bottom pb-1 mb-1" *ngFor="let t of c.transactions">
+          <div fxLyout="row wrap" class="text-blue font-weight-bold">
+            <span>{{t.history}}</span>
+            <span fxFlex></span>
+              <span>{{t.amount | currency:'BRL'}}</span>
+          </div>
+          <div fxLyout="row wrap" class="text-muted">
+            <small>{{t.transactionDate |  date: 'dd/MM hh:mm: a'}} </small>
+            <span fxFlex></span>
+            <small class="text-green">{{t.operation}} ({{t.transactionType}})</small>
+          </div>
+        </div>
+      </mat-expansion-panel>
+  </mat-accordion>
+</div>

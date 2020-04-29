@@ -1,0 +1,24 @@
+<div fxFlex="100" [@animate]="{value:'*',params:{delay:'400ms',scale:'.9'}}">
+      <mat-accordion multi="false">
+        <mat-expansion-panel >
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{partnerAccount.name | uppercase}} - {{partnerAccount.balance | currency:'BRL'}}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="border-bottom pb-1 mb-1" *ngFor="let t of partnerAccount.releases">
+            <div fxLyout="row wrap" class="text-blue font-weight-bold">
+              <span>{{t.history}}</span>
+              <span fxFlex></span>
+                <span>{{t.amount | currency:'BRL'}}</span>
+            </div>
+            <div fxLyout="row wrap" class="text-muted">
+              <small>{{t.transactionDate |  date: 'dd/MM hh:mm: a'}} </small>
+              <span fxFlex></span>
+              <small class="text-green">{{t.operation}} ({{t.transactionType}})</small>
+            </div>
+          </div>
+        </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+  

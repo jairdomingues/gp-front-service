@@ -1,0 +1,10 @@
+<mat-accordion multi="false" class="example-headers-align">
+  <mat-expansion-panel *ngFor="let c of accounts" hideToggle="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{c.name | uppercase}} - {{c.balance | currency:'BRL'}}
+      </mat-panel-title>
+      <button mat-raised-button color="accent" (click)="toggle(c)">PAGAR</button>
+    </mat-expansion-panel-header>
+  </mat-expansion-panel>
+</mat-accordion>

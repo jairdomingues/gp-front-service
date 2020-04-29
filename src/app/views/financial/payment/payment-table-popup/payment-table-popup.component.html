@@ -1,0 +1,6 @@
+<h1 matDialogTitle>{{data.title}}</h1>
+<div style="text-align:center" [hidden]="false">
+  <input readonly type="number" matInput class="input" (input)="onInputChange($event)" value={{value}} placeholder="Digite o seu PIN">
+  <div class="simple-keyboard"></div>
+</div>
+

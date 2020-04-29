@@ -1,0 +1,159 @@
+<h1 matDialogTitle>{{data.title}}</h1>
+<div *ngIf="data.payload.type==='account'">
+  <form [formGroup]="itemForm" (ngSubmit)="submit()">
+  <div fxLayout="row wrap" fxLayout.lt-sm="column">
+    <div fxFlex="50"  class="pr-1">
+      <mat-form-field class="full-width">
+        <input
+        matInput
+        name="name"
+        [formControl]="itemForm.controls['name']"
+        placeholder="Name">
+      </mat-form-field>
+    </div>
+
+    <div fxFlex="50"  class="pr-1">
+      <mat-form-field class="full-width">
+        <input
+        matInput
+        name="bankCode"
+        [formControl]="itemForm.controls['bankCode']"
+        placeholder="Banco">
+      </mat-form-field>
+    </div>
+
+    <div fxFlex="50"  class="pr-1">
+      <mat-form-field class="full-width">
+        <input
+        matInput
+        name="agency"
+        [formControl]="itemForm.controls['agency']"
+        placeholder="Agência">
+      </mat-form-field>
+    </div>
+
+    <div fxFlex="50"  class="pr-1">
+      <mat-form-field class="full-width">
+        <input
+        matInput
+        name="currentAccount"
+        [formControl]="itemForm.controls['currentAccount']"
+        placeholder="Conta Corrente">
+      </mat-form-field>
+    </div>
+
+    <div fxFlex="100" class="mt-1">
+      <button mat-raised-button color="primary" [disabled]="itemForm.invalid">{{"SAVE" | translate }}</button>
+      <span fxFlex></span>
+      <button mat-button color="warn" type="button" (click)="dialogRef.close(false)">Cancel</button>
+    </div>
+  </div>
+  </form>
+</div>
+
+<div *ngIf="data.payload.type==='crypto'">
+  <form [formGroup]="cryptoForm" (ngSubmit)="submit()">
+  <div fxLayout="row wrap" fxLayout.lt-sm="column">
+    <div fxFlex="50"  class="pr-1">
+      <mat-form-field class="full-width">
+        <input
+        matInput
+        name="name"
+        [formControl]="cryptoForm.controls['name']"
+        placeholder="Name">
+      </mat-form-field>
+    </div>
+    <div fxFlex="50"  class="pr-1">
+      <mat-form-field class="full-width">
+        <input
+        matInput
+        name="hashCard"
+        [formControl]="cryptoForm.controls['hashCard']"
+        placeholder="Hash Card">
+      </mat-form-field>
+    </div>
+
+    <div fxFlex="100" class="mt-1">
+      <button mat-raised-button color="primary" [disabled]="cryptoForm.invalid">{{"SAVE" | translate }}</button>
+      <span fxFlex></span>
+      <button mat-button color="warn" type="button" (click)="dialogRef.close(false)">Cancel</button>
+    </div>
+  </div>
+  </form>
+</div>
+
+<div *ngIf="data.payload.type==='credit'">
+
+  <form [formGroup]="cardForm" (ngSubmit)="submit()">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column">
+      <div fxFlex="100"  class="pr-1">
+        <mat-form-field class="full-width">
+          <input
+          matInput
+          name="name"
+          [formControl]="cardForm.controls['name']"
+          placeholder="Name">
+        </mat-form-field>
+      </div>
+      <div fxFlex="50"  class="pr-1">
+        <mat-form-field class="full-width">
+          <input
+          matInput
+          name="brand"
+          [formControl]="cardForm.controls['brand']"
+          placeholder="Brand">
+        </mat-form-field>
+      </div>
+      <div fxFlex="50"  class="pr-1">
+        <mat-form-field class="full-width">
+          <input
+          matInput
+          name="cardholderName"
+          [formControl]="cardForm.controls['cardholderName']"
+          placeholder="Card Holder Name">
+        </mat-form-field>
+      </div>
+      <div fxFlex="50"  class="pr-1">
+        <mat-form-field class="full-width">
+          <input
+          matInput
+          name="cardNumber"
+          [formControl]="cardForm.controls['cardNumber']"
+          placeholder="Card Number">
+        </mat-form-field>
+      </div>
+      <div fxFlex="50"  class="pr-1">
+        <mat-form-field class="full-width">
+          <input
+          matInput
+          name="expirationMonth"
+          [formControl]="cardForm.controls['expirationMonth']"
+          placeholder="Expiration Month">
+        </mat-form-field>
+      </div>
+      <div fxFlex="50"  class="pr-1">
+        <mat-form-field class="full-width">
+          <input
+          matInput
+          name="expirationHear"
+          [formControl]="cardForm.controls['expirationYear']"
+          placeholder="Expiration Year">
+        </mat-form-field>
+      </div>
+      <div fxFlex="50"  class="pr-1">
+        <mat-form-field class="full-width">
+          <input
+          matInput
+          name="securityCode"
+          [formControl]="cardForm.controls['securityCode']"
+          placeholder="CVV">
+        </mat-form-field>
+      </div>
+      <div fxFlex="100" class="mt-1">
+        <button mat-raised-button color="primary" [disabled]="cardForm.invalid">{{"SAVE" | translate }}</button>
+        <span fxFlex></span>
+        <button mat-button color="warn" type="button" (click)="dialogRef.close(false)">Cancel</button>
+      </div>
+    </div>
+    </form>
+</div>

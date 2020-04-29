@@ -1,0 +1,226 @@
+<div >
+  <mat-sidenav-container >
+    <mat-sidenav *ngIf="visible" EgretSideNavToggle class="shop-sidebar default-light-bg">
+      <div class="shop-filters-wrap">
+        <form [formGroup]="filterForm">
+          <mat-accordion multi="true" displayMode="flat">
+            <!-- Categories -->
+            <mat-expansion-panel expanded="true">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Categorias
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <ul class="product-categories">
+                <li [ngClass]="{'fw-500': 'all' === activeCategory}" (click)="setActiveCategory('all')">All</li>
+                <li *ngFor="let c of categories$ | async" [ngClass]="{'fw-500': c === activeCategory}" (click)="setActiveCategory(c)">{{c}}</li>
+              </ul>
+            </mat-expansion-panel>
+            <!-- Price -->
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Price
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <p class="m-0">Min: {{filterForm.controls['minPrice']['value'] || 20 | currency:'USD'}}</p>
+              <mat-slider class="full-width mb-1 pl-0" [formControl]="filterForm.controls['minPrice']" [thumbLabel]="true" [max]="filterForm.controls['maxPrice']?.value - 5"
+                [min]="20"></mat-slider>
+  
+              <p class="m-0">Max: {{filterForm.controls['maxPrice']['value'] || 40 | currency:'USD'}}</p>
+              <mat-slider class="full-width pl-0" [formControl]="filterForm.controls['maxPrice']" [thumbLabel]="true" [max]="50" [min]="filterForm.controls['minPrice']?.value + 5"></mat-slider>
+            </mat-expansion-panel>
+            <!-- Ratings -->
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Ratings
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <p class="m-0">Min: {{filterForm.controls['minRating']['value'] || 1}}</p>
+              <mat-slider class="full-width mb-1" [formControl]="filterForm.controls['minRating']" [thumbLabel]="true" [max]="filterForm.controls['maxRating']?.value - 1"
+                [min]="1"></mat-slider>
+  
+              <p class="m-0">Max: {{filterForm.controls['maxRating']['value'] || 5}}</p>
+              <mat-slider class="full-width mb-1" [formControl]="filterForm.controls['maxRating']" [thumbLabel]="true" [max]="5" [min]="filterForm.controls['minRating']?.value + 1"></mat-slider>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </form>
+      </div>
+    </mat-sidenav>
+    <div class="shop-wrap" fxLayout="row" fxLayoutWrap="wrap">
+      <!-- Filters -->
+      <!-- Right side -->
+      <div class="full-width">
+        <div class="content-card default-bg">
+        <mat-tab-group >
+          <mat-tab label="Loja">
+          <!-- Search Form -->
+          <div fxLayout="row" fxLayout.lt-sm="column" class="shop-top-toolbar">
+            <button *ngIf="visible" mat-icon-button class="mr-1" (click)="toggleSideNav()"><mat-icon>short_text</mat-icon> </button>
+            <div class="product-search-wrap">
+              <form [formGroup]="filterForm">
+                <input type="text" name="searchProduct" placeholder="Procurar produto" class="product-search default-bg full-width" [formControl]="filterForm.controls['search']">
+              </form>
+            </div>
+            <!-- View change buttons and cart -->
+            <span fxFlex></span>
+            <div [fxHide.lt-md]="true">
+              <button mat-icon-button [color]="viewMode === 'list-view' ? 'primary' : ''" (click)="viewMode = 'list-view'">
+                <mat-icon>format_list_bulleted</mat-icon>
+              </button>
+              <button mat-icon-button [color]="viewMode === 'grid-view' ? 'primary' : ''" (click)="viewMode = 'grid-view'">
+                <mat-icon>apps</mat-icon>
+              </button>
+            </div>
+            <span fxFlex="20px"></span>
+            <button mat-raised-button color="primary" routerLink="/shop/cart">
+              <mat-icon>shopping_cart</mat-icon> Carrinho ({{cartData.itemCount}})
+            </button>
+          </div>
+          <!-- Products container -->
+          <div class="product-container" 
+          [ngClass]="{'list-view': viewMode === 'list-view'}">
+            <!-- Product Box -->
+            <div  
+            class="product-wrap" 
+            *ngFor="let product of products$ | async | paginate: { itemsPerPage: 6, currentPage: currentPage }; let i = index;"
+            [@animate]="{value:'*',params:{delay: (i*100)+'ms', y:'50px'}}">
+              <div class="product-inner default-bg">
+                <div *ngIf="product?.badge?.text" class="product-badge mat-elevation-z7" [ngStyle]="{background: product?.badge?.color || '#f44336'}">
+                  <span>{{product?.badge?.text}}</span>
+                </div>
+                <div class="featured-img" [routerLink]="['/shop/products/', product.id]">
+                  <img [src]="product.photo" alt="">
+                </div>
+                <div class="info-wrap p-1">
+                  <div class="main-info">
+                    <h3 class="title" [routerLink]="['/shop/products/', product._id]">{{product.name}}</h3>
+                    <p class="text-muted p-line">{{product?.subtitle}}</p>
+                    <p class="text-muted p-line">
+                      <strong>Category:</strong> {{product?.category}}</p>
+                    <p class="text-muted p-line">
+                      <strong>Tags:</strong>
+                      <span *ngFor="let t of product.tags">{{t.text}} </span>
+                    </p>
+                  </div>
+                  <div class="actions">
+                    <div class="price-rating">
+                      <div class="product-rating" *ngIf="viewMode === 'grid-view'">
+                        <star-rating [rating]="product.ratings.rating" [starType]="'svg'" [readOnly]="true" [size]="'small'" [staticColor]="'ok'"></star-rating>
+                        <small class="text-muted">({{product.ratings.ratingCount}})</small>
+                      </div>
+                      <div class="price">
+                        <span>{{product?.price?.sale | currency:'USD'}}</span>
+                        <del class="text-muted">{{product?.price?.previous | currency:'USD'}}</del>
+                      </div>
+    
+                    </div>
+                    <div class="add-to-cart">
+                      <span fxFlex></span>
+                      <button mat-icon-button (click)="addToCart(product)">
+                        <mat-icon>add_shopping_cart</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <!-- Visible when viewMode === list-view -->
+                <div class="more-info-wrap p-1" *ngIf="viewMode === 'list-view'">
+                  <div class="more-info">
+                    <div class="more-actions mb-1">
+                      <div class="product-rating">
+                        <star-rating [starType]="'svg'" [readOnly]="true" [size]="'medium'" [staticColor]="'ok'" [rating]="4.63"></star-rating>
+                        <small class="text-muted">(140)</small>
+                      </div>
+                      <span fxFlex></span>
+                      <button mat-icon-button>
+                        <mat-icon>playlist_add</mat-icon>
+                      </button>
+                      <button mat-icon-button>
+                        <mat-icon>favorite</mat-icon>
+                      </button>
+                    </div>
+    
+                    <div>
+                      <ul>
+                        <li>
+                          <mat-icon>check</mat-icon> Heavy duty</li>
+                        <li>
+                          <mat-icon>check</mat-icon> Water resistance</li>
+                        <li>
+                          <mat-icon>check</mat-icon> Clean design</li>
+                        <li>
+                          <mat-icon>check</mat-icon> High quality raw materials</li>
+                      </ul>
+                    </div>
+    
+                  </div>
+                </div>
+    
+              </div>
+            </div>
+            <!-- End Product -->
+            <div class="products-pagination">
+              <pagination-controls (pageChange)="currentPage = $event"></pagination-controls>
+            </div>
+              </div>
+          <!-- End Products container -->
+        </mat-tab>
+      <mat-tab label="Locais" *ngIf="visible">
+        <div fxLayout="row wrap">
+          <div fxFlex="100" fxFlex.gt-sm="33">
+            <mat-card class="p-0">
+              <mat-card-title class=" m-0">
+                <div class="card-title-text">Próximos de você:<span fxFlex></span>
+                <small> {{radius / 1000 | number : '1.12'}} km</small></div>
+                <mat-divider></mat-divider>
+              </mat-card-title>
+              <mat-card-content class="p-0">
+                <agm-map [ngStyle]="{height: '300px'}" [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
+                  <agm-marker  [latitude]="latitude" [longitude]="longitude"></agm-marker>
+                  <ng-container *ngFor="let m of markers; let i = index">
+                    <agm-marker (markerClick)="clickedMarker(m.label, i)" [latitude]="m.lat" [longitude]="m.lng" [label]="m.label" [iconUrl]="m.icon" *ngIf="m.isShown">
+                        <agm-info-window>
+                            <div>{{m.content}}</div>
+                        </agm-info-window>
+                    </agm-marker>
+                  </ng-container>
+                  <agm-circle [latitude]="radiusLat" [longitude]="radiusLong" [radius]="radius" [fillColor]="'red'"
+                  [circleDraggable]="true" [editable]="false" (dragEnd)="radiusDragEnd($event)"
+                  (radiusChange)="event('radiusChange',$event)">
+                  </agm-circle>
+              '</agm-map>
+              </mat-card-content>
+            </mat-card>
+          </div>
+          <div fxFlex="100" fxFlex.gt-sm="66">
+              <!-- ticket and project table column -->
+              <div fxFlex="100" fxFlex.gt-sm="100" fxLayout="column wrap">
+                <mat-card class="default" [@animate]="{value:'*',params:{delay:'300ms',y:'50px'}}">
+                  <mat-card-title>Próximos à você</mat-card-title>
+                  <mat-card-content class="p-0">
+                    <mat-list class="compact-list mb-1">
+                      <mat-list-item *ngFor="let c of partners" class="" (click)="openShop(c.id)">
+                        <img  mat-list-avatar class="mr-1" src="assets/images/cryptocurrencies/BTC.png" alt="">
+                        <!--<img mat-list-avatar class="mr-1" [src]="t.img" alt="">-->
+                        <div fxLayout="row" fxFlex="100">
+                          <h6 class="m-0 mr-1">{{c.firstname}}</h6>
+                          <span fxFlex></span>
+                          <small class="text-muted mr-1">50km</small>
+                        </div>
+                      </mat-list-item>
+                    </mat-list>
+                  </mat-card-content>
+                </mat-card>
+              </div>
+          </div>
+        </div>
+
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+  </div>
+  
+    </div>
+  </mat-sidenav-container>
+</div>
