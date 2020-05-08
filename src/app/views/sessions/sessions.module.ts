@@ -21,6 +21,12 @@ import { Signup4Component } from './signup4/signup4.component';
 import { Signin3Component } from './signin3/signin3.component';
 import { Signin4Component } from './signin4/signin4.component';
 import { Signin2Component } from './signin2/signin2.component';
+ 
+import { NgxMaskModule, IConfig } from 'ngx-mask'
+ 
+const maskConfig: Partial<IConfig> = {
+  validation: false,
+};
 
 @NgModule({
   imports: [
@@ -30,6 +36,7 @@ import { Signin2Component } from './signin2/signin2.component';
     SharedMaterialModule,
     FlexLayoutModule,
     PerfectScrollbarModule,
+    NgxMaskModule.forRoot(maskConfig),    
     RouterModule.forChild(SessionsRoutes)
   ],
   declarations: [ForgotPasswordComponent, LockscreenComponent, SigninComponent, SignupComponent, NotFoundComponent, ErrorComponent, Signup2Component, Signup3Component, Signup4Component, Signin3Component, Signin4Component, Signin2Component]

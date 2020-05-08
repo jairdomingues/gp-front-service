@@ -1,4 +1,4 @@
-import { MatSidenav } from '@angular/material';
+import { MatSidenav } from '@angular/material/sidenav';
 import { Component, OnInit, ViewChild } from '@angular/core';
 
 @Component({

@@ -1,31 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { 
-  MatIconModule,
-  MatCardModule,
-  MatMenuModule,
-  MatProgressBarModule,
-  MatButtonModule,
-  MatChipsModule,
-  MatListModule,
-  MatGridListModule,
-  MatExpansionModule,
-  MatTabsModule,
-  MatTableModule,
-  MatFormFieldModule,
-  MatInputModule,
-  MatAutocompleteModule,
-  MatDatepickerModule,
-  MatRadioModule,
-  MatSelectModule,
-  MatSliderModule,
-  MatSlideToggleModule,
-  MatSidenavModule,
-  MatToolbarModule,
-  MatCheckboxModule,
-  MatDialog,
-  MatDialogModule
- } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ChartsModule } from 'ng2-charts';
@@ -48,6 +22,29 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { PaymentTablePopupComponent } from './payment/payment-table-popup/payment-table-popup.component';
 import { ScannerTablePopupComponent } from './scanner/scanner-table-popup/scanner-table-popup.component';
 import { ScannerInformationComponent } from './scanner/scanner-information/scanner-information.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatListModule } from '@angular/material/list';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatTableModule } from '@angular/material/table';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   imports: [
@@ -98,7 +95,7 @@ import { ScannerInformationComponent } from './scanner/scanner-information/scann
     TranslateModule,
     RouterModule.forChild(FinancialRoutes)
   ],
-  declarations: [AccountComponent, PaymentComponent, QRCodeComponent, ScannerComponent, ScannerInformationComponent, StatementComponent, AccountTablePopupComponent, PaymentTablePopupComponent, ScannerTablePopupComponent],
+  declarations: [ScannerInformationComponent, AccountComponent, PaymentComponent, QRCodeComponent, ScannerComponent, ScannerInformationComponent, StatementComponent, AccountTablePopupComponent, PaymentTablePopupComponent, ScannerTablePopupComponent],
   providers: [CrudService],
   entryComponents: [AccountTablePopupComponent, PaymentTablePopupComponent, ScannerTablePopupComponent],
   exports: []

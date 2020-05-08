@@ -4,13 +4,15 @@ import { CountryDB } from '../../../shared/inmemory-db/countries';
 import { ShopService, CartItem } from '../shop.service';
 import { egretAnimations } from "../../../shared/animations/egret-animations";
 import { Router } from '@angular/router';
-import { MatSnackBar, MatDialog, MatDialogRef } from '@angular/material';
+import { MatSnackBar} from '@angular/material/snack-bar';
 import { OrderService } from 'app/service/order/order.service';
 import { AppAlertService } from 'app/shared/services/app-alert/app-alert.service';
 import { AppLoaderService } from 'app/shared/services/app-loader/app-loader.service';
 import { AppConfirmService } from 'app/shared/services/app-confirm/app-confirm.service';
 import { TokenStorageService } from 'app/_services/token-storage.service';
 import { CustomerService } from 'app/service/customer/customer.service';
+import { PartnerService } from 'app/service/partner/partner.service';
+import { AccountService } from 'app/service/account/account.service';
 
 @Component({
   selector: 'app-checkout',
@@ -31,6 +33,19 @@ export class CheckoutComponent implements OnInit {
   public shipping: any = 'Free';
   public paymentMethod: string;
 
+  totalCrypto: number = 0;
+  totalCreditCard: number = 0;
+  totalAccount: number = 0;
+  user: any = {};
+  customer: any = {};
+  partner: any = {};
+  roleName: any;
+  ecommerce: boolean = true;
+  partnerId: any;
+  accounts: any = [];
+
+  amount: any = [];
+
   constructor(
     private snack: MatSnackBar,
     private fb: FormBuilder,
@@ -43,22 +58,23 @@ export class CheckoutComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private tokenStorageService: TokenStorageService,
     private customerService: CustomerService,
+    private accountService: AccountService,
+    private partnerService: PartnerService,
   ) {
     let countryDB = new CountryDB();
     this.countries = countryDB.countries;
   }
-
-  visible = true;
-  totalCrypto: number = 0;
-  totalCreditCard: number = 0;
-  totalAccount: number = 0;
-  user: any = {};
-  customer: any = {};
-
+  
   ngOnInit() {
     this.user = this.tokenStorageService.getUser();
     if (this.user) {
-      this.getCustomer();
+      this.roleName = this.user.roles[0];
+      if (this.roleName==='ROLE_USER') {
+        this.getCustomer();
+      } else {
+        this.getPartner();
+        this.ecommerce = false;
+      }
     } else {
       this.router.navigateByUrl('/others/n1/n2');      
     }
@@ -72,6 +88,30 @@ export class CheckoutComponent implements OnInit {
       if (customer==null) {
         this.router.navigateByUrl('/others/n1/n2');
       }
+      this.getAccounts();
+    }, (err) => {
+      this.alertService.confirm({title: err.status, message: err.error})
+      .subscribe((result) => {
+        this.loader.close();
+      });
+    });
+  }
+
+  async getPartner() {
+    await this.partnerService.getPartnerUserId(this.user.id).subscribe((partner: any) => {
+      this.partner = partner;
+      this.partnerId = this.partner.id;
+    }, (err) => {
+      this.alertService.confirm({title: err.status, message: err.error})
+      .subscribe((result) => {
+        this.loader.close();
+      });
+    });
+  }
+
+  async getAccounts() {
+    await this.accountService.getCustomerAccounts(this.customer.id).subscribe((accounts: Array<any>) => {
+      this.accounts = accounts; 
     });
   }
 
@@ -123,10 +163,17 @@ export class CheckoutComponent implements OnInit {
     })
   }
 
-  placeOrder() {
-    let verifica = (this.totalAccount+this.totalCreditCard+this.totalCrypto);
-    if (this.total!=verifica) {
-      this.confirmService.confirm({title: "Erro", message: "Total não é válido!"})
+  itens = [];
+
+  onBlur(i: any, c: any){
+    this.itens[i] = c;
+  }
+  value: any;
+
+  sendOrder() {
+    const sum = this.itens.reduce((sum, current) => sum + current.lastBalance, 0);
+    if (this.total!=sum) {
+      this.confirmService.confirm({title: "Erro", message: "Valor total não confere!"})
       .subscribe((result) => {
         this.cdr.markForCheck();
       });
@@ -135,19 +182,27 @@ export class CheckoutComponent implements OnInit {
 
     let payments = [];
     let payment = {};
-    if (this.totalAccount)  {
-      payment = { paymentMethod: "CurrentAccount", amount: this.totalAccount};   
-      payments.push(payment);
+    for (let entry of this.itens.filter(a => a.typeAccount !== 'undefined')) {
+      console.log(entry.typeAccount+" mostra" );
+      if (entry.typeAccount==='WALLET') {
+        payment = { id: entry.id, paymentMethod: entry.typeAccount, amount: entry.lastBalance};   
+        payments.push(payment);
+      }
+      if (entry.typeAccount==='CURRENT_ACCOUNT') {
+        payment = { id: entry.id, paymentMethod: entry.typeAccount, amount: entry.lastBalance};   
+        payments.push(payment);
+      }
+      if (entry.typeAccount==='CREDIT_CARD') {
+        payment = { id: entry.id, paymentMethod: entry.typeAccount, amount: entry.lastBalance};   
+        payments.push(payment);
+      }
     }
-    if (this.totalCreditCard)  {
-      payment = { paymentMethod: "CreditCard", amount: this.totalCreditCard};   
-      payments.push(payment);
+    //caso seja produto solicitado pelo ecommerce...verificar partner produto 
+    if (this.ecommerce) {
+      this.partnerId = this.cart[0].product.partnerId;
     }
-    if (this.totalCrypto)  {
-      payment = { paymentMethod: "CryptoCurrency", amount: this.totalCrypto};   
-      payments.push(payment);
-    }
-    let salesOrder = { clientRef: this.customer.id, partnerRef: 1, payments: payments, ecommerce: this.visible};
+
+    let salesOrder = { clientRef: this.customer.id, partnerRef: this.partnerId, payments: payments, ecommerce: this.ecommerce};
     this.callOrder(salesOrder);
   }
 
@@ -158,8 +213,8 @@ export class CheckoutComponent implements OnInit {
       this.snack.open('Sales order created', 'OK', { duration: 4000 }).afterOpened()
       .subscribe(() => {
           this.loader.close();
-          //aqui se for customer é true se for partner é false
-          if (this.visible) {
+          //aqui se for customer é pagamento ja gerado se for partner é pagamento por qrcode
+          if (this.roleName==='ROLE_USER') {
             this.router.navigateByUrl('/financial/information/'+resposta.id)
           } else {
             this.router.navigateByUrl('/financial/scanner/'+resposta.id);

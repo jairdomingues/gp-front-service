@@ -7,7 +7,7 @@ import { UserService } from 'app/service/user/user.service';
 import { HeroService } from 'app/shared/hero.service';
 import { AppLoaderService } from 'app/shared/services/app-loader/app-loader.service';
 import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-signup4',

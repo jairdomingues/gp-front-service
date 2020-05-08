@@ -41,6 +41,10 @@ export class PartnerService {
     return this.http.get<any>(this.apiUrl+'partners_user/'+userId);
   }
 
+  getPartner(partnerId): Observable<any> {
+    return this.http.get<any>(this.apiUrl+'partners/'+partnerId);
+  }
+
   getPartnerAccountByPartner(partnerId): Observable<any> {
     return this.http.get<any>(this.apiUrl+'partner_accounts/'+partnerId);
   }

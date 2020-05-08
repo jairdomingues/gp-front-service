@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { egretAnimations } from "../../../shared/animations/egret-animations";
 import { ShopService, CartItem } from '../shop.service';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Product } from '../../../shared/models/product.model';
 import { Subscription } from 'rxjs';
 import { ProductService } from '../../../service/product/product.service';
@@ -48,7 +48,9 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     }, err => {
       this.product = {
         _id: '',
+        partnerId: 1000,
         name: '',
+        partnerName: '',
         price: { sale: 0 }
       };
     })

@@ -31,59 +31,72 @@ interface IBadge {
 @Injectable()
 export class NavigationService {
 
+  isLoggedIn: boolean;
+
   constructor(private tokenStorageService: TokenStorageService,
               private messageService: MessageService) {
+    this.isLoggedIn = !!this.tokenStorageService.getToken();
+    // if (this.isLoggedIn) {
+    //   const user = this.tokenStorageService.getUser();
+    //   let role = user.roles[0];
+    //   if(role==='ROLE_PARTNER') {
+    //     // this.iconMenu = [];
+    //     // this.menuItems = new BehaviorSubject<IMenuItem[]>(this.iconMenu);
+    //     // // navigation component has subscribed to this Observable
+    //     // this.menuItems$ = this.menuItems.asObservable();
+    //   }
+    // }
   }
 
   iconMenu: IMenuItem[] = [
-    {
-      id: "home",
-      name: "HOME",
-      type: "icon",
-      tooltip: "Home",
-      icon: "home",
-      state: "home"
-    },
-    {
-      id: "shop",
-      name: "SHOP",
-      type: "icon",
-      tooltip: "Shop",
-      icon: "store",
-      state: "shop"
-    },
-    {
-      id: "tour",
-      name: "TOUR",
-      type: "icon",
-      tooltip: "Tour",
-      icon: "flight_takeoff",
-      state: "tour"
-    },
-    {
-      id: "account",
-      name: "Minha conta",
-      type: "dropDown",
-      tooltip: "Pages",
-      icon: "view_carousel",
-      state: "sessions",
-      sub: [
-        { id:"register", name: "Register", state: "signup2" },
-        { id:"login", name: "Login", state: "signin2" },
-      ]
-    },
-    {
-      id: "information",
-      name: "Informações",
-      type: "dropDown",
-      tooltip: "Pages",
-      icon: "view_carousel",
-      state: "others", 
-      sub: [
-          { id:"help", name: "Help", state: "blank" },
-          { id:"about", name: "About", state: "n1" },
-        ]
-    }
+    // {
+    //   id: "home",
+    //   name: "HOME",
+    //   type: "icon",
+    //   tooltip: "Home",
+    //   icon: "home",
+    //   state: "home"
+    // },
+    // {
+    //   id: "shop",
+    //   name: "SHOP",
+    //   type: "icon",
+    //   tooltip: "Shop",
+    //   icon: "store",
+    //   state: "shop"
+    // },
+    // {
+    //   id: "tour",
+    //   name: "TOUR",
+    //   type: "icon",
+    //   tooltip: "Tour",
+    //   icon: "flight_takeoff",
+    //   state: "tour"
+    // },
+    // {
+    //   id: "account",
+    //   name: "Minha conta",
+    //   type: "dropDown",
+    //   tooltip: "Pages",
+    //   icon: "view_carousel",
+    //   state: "sessions",
+    //   sub: [
+    //     { id:"register", name: "Register", state: "signup2" },
+    //     { id:"login", name: "Login", state: "signin2" },
+    //   ]
+    // },
+    // {
+    //   id: "information",
+    //   name: "Informações",
+    //   type: "dropDown",
+    //   tooltip: "Pages",
+    //   icon: "view_carousel",
+    //   state: "others", 
+    //   sub: [
+    //       { id:"help", name: "Help", state: "blank" },
+    //       { id:"about", name: "About", state: "n1" },
+    //     ]
+    // }
   ];
 
   // Icon menu TITLE at the very top of navigation.

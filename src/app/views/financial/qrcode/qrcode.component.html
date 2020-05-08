@@ -3,7 +3,7 @@
     <button mat-raised-button color="accent" routerLink="/shop">Go Back To Shop</button>
 </mat-card>
 <div style="text-align:center">
-    <ngx-qrcode class="qrcode" *ngIf="display" id="qrCodeImage" [qrc-element-type]="elementType" [qrc-value]="value">
+    <ngx-qrcode cssClass = "aclass" *ngIf="display" id="qrCodeImage" [element-type]="elementType" [value]="value" errorCorrectionLevel = "L">
     </ngx-qrcode><br>
     <mat-card class="text-center">
         <a mat-raised-button color="accent" [href]="href" *ngIf="display" (click)="downloadImage()" download>Download QRCode</a>

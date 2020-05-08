@@ -43,6 +43,7 @@ export class ShopService {
   public getCart(): Observable<CartItem[]> {
     return of(this.cart)
   }
+
   public addToCart(cartItem: CartItem): Observable<CartItem[]> {
     let index = -1;
     this.cart.forEach((item, i) => {
@@ -60,12 +61,14 @@ export class ShopService {
       return of(this.cart)
     }
   }
+
   private updateCount() {
     this.cartData.itemCount = 0;
     this.cart.forEach(item => {
       this.cartData.itemCount += item.data.quantity;
     })
   }
+
   public removeFromCart(cartItem: CartItem): Observable<CartItem[]> {
     this.cart = this.cart.filter(item => {
       if(item.product._id == cartItem.product._id) {
@@ -99,18 +102,6 @@ export class ShopService {
     }
   }
 
-  public getProducts1(): Observable<Product[]> {
-    let productDB = new ProductDB();
-    return of(productDB.products)
-      .pipe(
-        delay(500),
-        map((data: Product[]) => {
-          this.products = data;
-          return data;
-        })
-      )
-  }
-  
   public getProductDetails(productID): Observable<Product> {
     let productDB = new ProductDB();
     let product = productDB.products.filter(p => p._id === productID)[0];
@@ -119,6 +110,7 @@ export class ShopService {
     }
     return of(product)
   }
+  
   public getCategories(categories: any): Observable<any> {
     return of(categories);
   }

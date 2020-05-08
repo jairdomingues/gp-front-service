@@ -3,11 +3,12 @@ import { map } from "rxjs/operators";
 import { AccountService } from "app/service/account/account.service";
 import { AppAlertService } from "app/shared/services/app-alert/app-alert.service";
 import { AppLoaderService } from "app/shared/services/app-loader/app-loader.service";
-import { MatSnackBar, MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router, ActivatedRoute } from "@angular/router";
-import { ScannerTablePopupComponent } from "./scanner-table-popup/scanner-table-popup.component";
 import { TokenStorageService } from "app/_services/token-storage.service";
 import { CustomerService } from "app/service/customer/customer.service";
+import { ScannerTablePopupComponent } from "./scanner-table-popup/scanner-table-popup.component";
 
 @Component({
   selector: "app-scanner",
@@ -24,7 +25,7 @@ export class ScannerComponent implements OnInit {
   totalCreditCard: any;
   totalCrypto: any;
   user: any = {};
-  customer: any = {};
+//  customer: any = {};
   orderId: any;
 
   constructor(private accountService: AccountService,
@@ -41,23 +42,24 @@ export class ScannerComponent implements OnInit {
   ngOnInit(): void {
     this.user = this.tokenStorageService.getUser();
     this.orderId =  this.route.snapshot.params['orderId'];
-    this.getCustomer();
+    //this.getCustomer();
   }
 
-  async getCustomer() {
-    await this.customerService.getCustomerUuidUser(this.user.id).subscribe((customer: any) => {
-      this.customer = customer;
-      if (customer==null) {
-        this.router.navigateByUrl('/others/n1/n2');
-      }
-    });
-  }
+  // async getCustomer() {
+  //   await this.customerService.getCustomerUuidUser(this.user.id).subscribe((customer: any) => {
+  //     this.customer = customer;
+  //     if (customer==null) {
+  //       this.router.navigateByUrl('/others/n1/n2');
+  //     }
+  //   });
+  // }
 
   onCodeResult(resultString: string) {
     console.log(this.checkQRJSON(resultString));
     if (this.submit) {
+      
       this.submit = false;
-      let request = {"customerId": this.customer.id, "uuid": resultString, "orderId": this.orderId};
+      let request = {"customerId": this.user.id, "uuid": resultString, "orderId": this.orderId};
       let title = 'Eba!! Câmera posicionada.';
       let dialogRef: MatDialogRef<any> = this.dialog.open(ScannerTablePopupComponent, {
         width: '720px',

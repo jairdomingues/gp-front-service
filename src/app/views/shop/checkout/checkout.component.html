@@ -145,60 +145,35 @@
           <div class="p-1">
             <div class="m-333" fxLayout="column">
               <span fxFlex="16px"></span>
-
-
-              <mat-accordion multi="false">
-                <mat-expansion-panel>
+              <mat-accordion multi="false" *ngIf="accounts.length > 0">
+                <mat-expansion-panel *ngFor="let c of accounts; let i = index;">
                   <mat-expansion-panel-header>
                     <mat-panel-title>
-                      Cryptocurrency
+                      <mat-icon *ngIf="c.typeAccount==='WALLET'">call_missed_outgoing</mat-icon>
+                      <mat-icon *ngIf="c.typeAccount==='CURRENT_ACCOUNT'">contacts</mat-icon>
+                      <mat-icon *ngIf="c.typeAccount==='CREDIT_CARD'">credit_card</mat-icon>
+                      <div class="m-4"></div>
+                      {{c.name | uppercase}}
                     </mat-panel-title>
                   </mat-expansion-panel-header>
                   <div class="border-bottom pb-1 mb-1">
-                    <div fxLyout="row wrap" class="text-blue font-weight-bold"></div>
-                    <div class="example-container">
-                      <input matInput [(ngModel)]="totalCrypto" placeholder="Amount" type="number" class="example-right-align">
-                    </div>             
+                    <div fxLyout="row wrap" class="text-muted">
+                      <small *ngIf="c.typeAccount==='WALLET'">Amount</small>
+                      <small *ngIf="c.typeAccount==='CURRENT_ACCOUNT'">{{c.balance | currency:'BRL' }}</small>
+                      <small *ngIf="c.typeAccount==='CREDIT_CARD'">{{ (c.cardNumber  | slice:0:4)+'**** **** ****' }}</small>
+                      <span fxFlex></span>
+                      <small class="text-green"><input currencyMask matInput (blur)="onBlur(i, c)" [(ngModel)]="c.lastBalance" placeholder="Amount"></small>
+                    </div>
                   </div>
                 </mat-expansion-panel>
-
-                <mat-expansion-panel>
-                  <mat-expansion-panel-header>
-                    <mat-panel-title>
-                      Credit Card
-                    </mat-panel-title>
-                  </mat-expansion-panel-header>
-                  <div class="border-bottom pb-1 mb-1">
-                    <div fxLyout="row wrap" class="text-blue font-weight-bold"></div>
-                    <div class="example-container">
-                      <input matInput [(ngModel)]="totalCreditCard" placeholder="Amount" type="number" class="example-right-align">
-                    </div>             
-                  </div>
-                </mat-expansion-panel>
-
-                <mat-expansion-panel>
-                  <mat-expansion-panel-header>
-                    <mat-panel-title>
-                      Transfer Account
-                    </mat-panel-title>
-                  </mat-expansion-panel-header>
-                  <div class="border-bottom pb-1 mb-1">
-                    <div fxLyout="row wrap" class="text-blue font-weight-bold"></div>
-                    <div class="example-container">
-                      <input matInput [(ngModel)]="totalAccount" placeholder="Amount" type="number" class="example-right-align">
-                    </div>             
-                  </div>
-                </mat-expansion-panel>
-
               </mat-accordion>
-
             </div>
           </div>
 
           <mat-card-actions>
             <span fxFlex></span>
             <button mat-raised-button color="primary" routerLink="/shop/cart">Back to Cart</button>
-            <button mat-raised-button color="warn" (click)="placeOrder()">Place Order</button>
+            <button mat-raised-button color="warn" (click)="sendOrder()">Send Order</button>
           </mat-card-actions>
         </mat-card-content>
       </mat-card>

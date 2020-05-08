@@ -11,7 +11,7 @@
     </mat-card>
 
     <div class="mb-32" fxLayout="row wrap" fxLayoutAlign="center center">
-        <img width="200px" src="assets/images/illustrations/posting_photo.svg" alt="">
+        <img width="200px" src="assets/images/illustrations/hands-mobile.png" alt="">
     </div>
 
     <form #form="ngForm" ngxScrollToFirstInvalid autocomplete="off"
@@ -23,7 +23,7 @@
     >
       <mat-form-field class="full-width" appearance="outline">
         <mat-label>Nome completo</mat-label>
-        <input [(ngModel)]="user.username"
+        <input [(ngModel)]="user.username"  
           formControlName="name"
           matInput
           type="text"
@@ -55,7 +55,8 @@
         <mat-form-field fxFlex="1 1 0%" appearance="outline">
           <mat-label>Telefone</mat-label>
           <span matPrefix>+55 &nbsp;</span>
-          <input [(ngModel)]="user.phone" matInput type="tel" formControlName="phone" matInput placeholder="Telefone">
+
+          <input mask="(00) 000 00 00 00" [(ngModel)]="user.phone" matInput type="tel" formControlName="phone" matInput placeholder="Telefone">
           <mat-error *ngIf="signupForm.controls.phone.errors && form.submitted">
             <ng-template [ngIf]="signupForm.controls.phone.errors.required">
               Campo obrigatório

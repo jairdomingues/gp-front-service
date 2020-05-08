@@ -77,11 +77,11 @@ export const rootRouterConfig: Routes = [
         loadChildren: () => import('./views/app-tour/app-tour.module').then(m => m.AppTourModule), 
         data: { title: 'Tour', breadcrumb: 'TOUR'}
       },
-      {
-        path: 'forms', 
-        loadChildren: () => import('./views/forms/forms.module').then(m => m.AppFormsModule), 
-        data: { title: 'Forms', breadcrumb: 'FORMS'}
-      },
+      // {
+      //   path: 'forms', 
+      //   loadChildren: () => import('./views/forms/forms.module').then(m => m.AppFormsModule), 
+      //   data: { title: 'Forms', breadcrumb: 'FORMS'}
+      // },
       {
         path: 'chart',
         loadChildren: () => import('./views/chart-example-view/chart-example-view.module').then(m => m.ChartExampleViewModule), 
@@ -123,7 +123,7 @@ export const rootRouterConfig: Routes = [
         data: { title: 'Loja', breadcrumb: 'Loja'}
       },
       {
-        path: 'shop/:id', 
+        path: 'shop/partner/:idPartner', 
         loadChildren: () => import('./views/shop/shop.module').then(m => m.ShopModule), 
         data: { title: 'Loja', breadcrumb: 'Loja'}
       },

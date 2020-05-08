@@ -21,6 +21,8 @@ export class SidebarSideComponent implements OnInit, OnDestroy, AfterViewInit {
   public isLoggedIn: boolean;
   messages: any[] = [];
   subscription: Subscription;
+  visible: boolean = true;
+  user: any = {};
 
   constructor(
     private navService: NavigationService,
@@ -44,14 +46,17 @@ export class SidebarSideComponent implements OnInit, OnDestroy, AfterViewInit {
       })
 
       if (this.isLoggedIn) {
-        const user = this.tokenStorageService.getUser();
-        this.username = user.username;
-        let role = user.roles[0];
+        this.user = this.tokenStorageService.getUser();
+        this.username = this.user.username;
+        let role = this.user.roles[0];
         if(role==='ROLE_USER') {
           this.createMenuRoleUser();
         } else if(role==='ROLE_PARTNER') {
+          this.visible = false;
           this.createMenuRolePartner();
-        }
+        } 
+      } else {
+        this.createMenuAnonymus();
       }
 
       //Checks item list has any icon type.
@@ -86,11 +91,109 @@ export class SidebarSideComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  createMenuRoleUser() {
-    this.menuItems = this.menuItems.filter(obj => obj.id !== 'account');
-    this.menuItems = this.menuItems.filter(obj => obj.id !== 'information');
+  createMenuAnonymus() {
+    this.menuItems = [];
 
     let o = {
+      id: "home",
+      name: "HOME",
+      type: "icon",
+      tooltip: "Home",
+      icon: "home",
+      state: "home",
+      sub: []
+    };
+    this.menuItems.push(o);
+
+    o = {
+      id: "shop",
+      name: "SHOP",
+      type: "icon",
+      tooltip: "Shop",
+      icon: "store",
+      state: "shop",
+      sub: []
+    };
+    this.menuItems.push(o);
+
+    o = {
+      id: "tour",
+      name: "TOUR",
+      type: "icon",
+      tooltip: "Tour",
+      icon: "flight_takeoff",
+      state: "tour",
+      sub: []
+    };
+    this.menuItems.push(o);
+
+    o = {
+      id: "account",
+      name: "Minha conta",
+      type: "dropDown",
+      tooltip: "Pages",
+      icon: "view_carousel",
+      state: "sessions",
+      sub: [
+        { id:"register", name: "Register", state: "signup2" },
+        { id:"login", name: "Login", state: "signin2" },
+      ]
+    };
+    this.menuItems.push(o);
+
+    o = {
+      id: "information",
+      name: "Informações",
+      type: "dropDown",
+      tooltip: "Pages",
+      icon: "view_carousel",
+      state: "others", 
+      sub: [
+          { id:"help", name: "Help", state: "blank" },
+          { id:"about", name: "About", state: "n1" },
+        ]
+    };
+    this.menuItems.push(o);
+
+  }
+
+  createMenuRoleUser() {
+    this.menuItems = [];
+
+    let  o = {
+      "id": "home",
+      "name": "HOME",
+      "type": "icon",
+      "tooltip": "Home",
+      "icon": "home",
+      "state": "home",
+      "sub":[]
+    };
+    this.menuItems.push(o);
+
+    o = {
+      "id": "shop",
+      "name": "SHOP",
+      "type": "icon",
+      "tooltip": "Shop",
+      "icon": "store",
+      "state": "shop",
+      "sub":[]
+    };
+    this.menuItems.push(o);
+
+    o = {
+      "id": "tour",
+      "name": "TOUR",
+      "type": "icon",
+      "tooltip": "Tour",
+      "icon": "flight_takeoff",
+      "state": "tour",
+      "sub":[]
+    };
+    this.menuItems.push(o);
+
+    o = {
     "id": "account",
     "name": "Minha Conta",
     "type": "dropDown",
@@ -151,15 +254,36 @@ export class SidebarSideComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   createMenuRolePartner() {
-    this.menuItems = this.menuItems.filter(obj => obj.id !== 'account');
-    this.menuItems = this.menuItems.filter(obj => obj.id !== 'information');
+    this.menuItems = [];
 
     let o = {
+      "id": "shop",
+      "name": "SHOP",
+      "type": "icon",
+      "tooltip": "Shop",
+      "icon": "add_shopping_cart",
+      "state": "shop",
+      "sub":[]
+    }
+    this.menuItems.push(o);
+
+    o = {
+      "id": "service",
+      "name": "Service",
+      "type": "icon",
+      "tooltip": "Service",
+      "icon": "store",
+      "state": "shop/service/cart",
+      "sub":[]
+    }
+    this.menuItems.push(o);
+
+    o = {
       "id": "dashboard",
       "name": "DASHBOARD",
       "type": "dropDown",
       "tooltip": "Dashbaord",
-      "icon": "format_list_bulleted",
+      "icon": "dashboard",
       "state": "dashboard",
       "sub": [
         { "name": "Default", state: "default" },
@@ -173,7 +297,7 @@ export class SidebarSideComponent implements OnInit, OnDestroy, AfterViewInit {
     "name": "Minha Conta",
     "type": "dropDown",
     "tooltip": "Pages",
-    "icon": "view_carousel",
+    "icon": "person", 
     "state": "profile",
     "sub": [
         { "name": "Profile", state: "overview" },
@@ -201,7 +325,7 @@ export class SidebarSideComponent implements OnInit, OnDestroy, AfterViewInit {
       "name": "Financeiro",
       "type": "dropDown",
       "tooltip": "Pages",
-      "icon": "view_carousel",
+      "icon": "attach_money",
       "state": "release",
       "sub": [
           { "name": "Extrato carteira", state: "transaction" },

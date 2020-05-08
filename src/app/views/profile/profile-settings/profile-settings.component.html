@@ -82,9 +82,11 @@
       <mat-card-content>
         <div class="mb-1 mt-1">
           <p>Upload a profile picture</p>
+          <!--
           <input type="file" ng2FileSelect [uploader]="uploader" />
+          -->
         </div>
-
+<!--
         <div class="mb-1">
           <div ng2FileDrop
           [ngClass]="{'dz-file-over': hasBaseDropZoneOver}"
@@ -94,6 +96,8 @@
           Drop png/jpeg file here
           </div>
         </div>
+-->
+
         <table class="default-table mat-box-shadow" style="width: 100%">
           <thead>
             <tr>
@@ -104,6 +108,7 @@
                 <th>Actions</th>
             </tr>
             </thead>
+<!--            
             <tbody *ngIf="uploader.queue.length; else tableNoData">
             <tr *ngFor="let item of uploader.queue">
                 <td>{{ item?.file?.name }}</td>
@@ -143,6 +148,7 @@
                 </td>
             </tr>
             </tbody>
+-->            
             <ng-template #tableNoData>
               <p [ngStyle]="{padding: '0 1.2rem'}">Queue is empty</p>
             </ng-template>

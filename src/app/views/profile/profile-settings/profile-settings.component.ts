@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { FileUploader } from 'ng2-file-upload';
+// import { FileUploader } from 'ng2-file-upload';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TokenStorageService } from 'app/_services/token-storage.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -7,7 +7,7 @@ import { CustomValidators } from 'ng2-validation';
 import { CustomerService } from 'app/service/customer/customer.service';
 import { AppLoaderService } from 'app/shared/services/app-loader/app-loader.service';
 import { AppAlertService } from 'app/shared/services/app-alert/app-alert.service';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AppConfirmService } from 'app/shared/services/app-confirm/app-confirm.service';
 
 @Component({
@@ -17,7 +17,7 @@ import { AppConfirmService } from 'app/shared/services/app-confirm/app-confirm.s
 })
 export class ProfileSettingsComponent implements OnInit {
 
-  public uploader: FileUploader = new FileUploader({ url: 'upload_url' });
+  // public uploader: FileUploader = new FileUploader({ url: 'upload_url' });
   public hasBaseDropZoneOver: boolean = false;
   public customerForm: FormGroup;
   user: any = {};
@@ -69,7 +69,7 @@ export class ProfileSettingsComponent implements OnInit {
   }
 
   welcome() {
-    this.confirmService.confirm({title: "Bem vindo!", message: "Você deve atualizar os dados."})
+    this.confirmService.confirm({title: "Bem vindo!", message: " Olá, tudo bem? Para que você tenha acesso a todas as funcionalidades do App, é necessário que você complete o seu cadastro."})
       .subscribe((result) => {
         this.cdr.markForCheck();
       });

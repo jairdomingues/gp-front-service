@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
-import { MatSidenav, MatDialog } from '@angular/material';
+import { MatSidenav } from '@angular/material/sidenav';
 import { ChatService } from './chat.service';
 
 @Component({

@@ -4,7 +4,7 @@ import { Validators, FormGroup, NgForm, FormGroupDirective, FormControl, Abstrac
 import { FormBuilder } from "@angular/forms";
 import { Router, ActivatedRoute } from '@angular/router'
 import { Component, OnInit, OnDestroy, ViewChild } from "@angular/core";
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { AppLoaderService } from '../../../shared/services/app-loader/app-loader.service';
 import { AppAlertService } from '../../../shared/services/app-alert/app-alert.service';

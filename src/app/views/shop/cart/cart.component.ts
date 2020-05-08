@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ShopService, CartItem } from '../shop.service';
 import { egretAnimations } from "../../../shared/animations/egret-animations";
-import { MatSnackBar, MatSidenav } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-cart',
@@ -10,21 +10,37 @@ import { MatSnackBar, MatSidenav } from '@angular/material';
   animations: [egretAnimations]
 })
 export class CartComponent implements OnInit {
+  
   public cart: CartItem[];
   public total: number;
   public subTotal: number;
   public vat: number = 0;
+
   constructor(
     private shopService: ShopService,
     private snackBar: MatSnackBar
   ) { }
 
-  visible = true;
-
   ngOnInit() {
     this.getCart();
     this.onQuantityChange();
   }
+
+  addToCart(product) {
+    let cartItem: CartItem = {
+      product: product,
+      data: {
+        quantity: 1
+      }
+    };
+    this.shopService
+    .addToCart(cartItem)
+    .subscribe(cart => {
+      this.cart = cart;
+      this.snackBar.open('Product added to cart', 'OK', { duration: 4000 });
+    })
+  }
+  
   getCart() {
     this.shopService
     .getCart()
@@ -32,6 +48,7 @@ export class CartComponent implements OnInit {
       this.cart = cart;
     })
   }
+
   removeProduct(cartItem) {
     this.shopService
     .removeFromCart(cartItem)
@@ -39,6 +56,7 @@ export class CartComponent implements OnInit {
       this.cart = res;
     })
   }
+
   onQuantityChange() {
     this.subTotal = 0;
     this.cart.forEach(item => {

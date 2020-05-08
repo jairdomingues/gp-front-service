@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { MatSnackBar, MatSidenav } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSidenav } from '@angular/material/sidenav';
 import { ShopService, CartItem } from '../shop.service';
 import { Product } from '../../../shared/models/product.model';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms'
@@ -12,6 +13,8 @@ import { Category } from 'app/views/cruds/category/category.model';
 import { MapsAPILoader } from '@agm/core';
 import { PartnerService } from 'app/service/partner/partner.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { TokenStorageService } from 'app/_services/token-storage.service';
+import { AppAlertService } from 'app/shared/services/app-alert/app-alert.service';
  
 declare var google: any; 
 
@@ -71,20 +74,79 @@ export class ProductsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
     private loader: AppLoaderService,
+    public alertService: AppAlertService,
+    private tokenStorageService: TokenStorageService,
     private partnerService: PartnerService
   ) { 
   }
 
+  partnerName: any;
   partnerId: any;
+  user: any = {};
+  roleName: any;
+  partner: any = {};
 
   ngOnInit() {
-    this.partnerId = this.route.snapshot.params['id'];
-    this.viewMap();
+    this.partnerId = this.route.snapshot.params['idPartner'];
+    //verifica se foi passado o partner pela rota
+    if (typeof this.partnerId !== 'undefined')  {
+      this.visible = false;
+      this.getPartner(this.partnerId);
+    }
     this.buildFilterForm(this.shopService.initialFilters);
-    this.categoryService.getCategories().subscribe((categories: Array<Category>) => {
-        this.categories = categories;
-        this.init();
+    this.user = this.tokenStorageService.getUser();
+    //verifica usuario partner logado
+    if (this.user) {
+      this.roleName = this.user.roles[0];
+      if (this.roleName==='ROLE_PARTNER') {
+        this.visible = false;
+        this.getPartnerUserId();
+      } else {
+        this.viewMap();
+        this.categoryService.getCategories().subscribe((categories: Array<Category>) => {
+            this.categories = categories;
+            this.initProducts();
+          });
+    
+      }
+    } else {
+      this.viewMap();
+      this.categoryService.getCategories().subscribe((categories: Array<Category>) => {
+          this.categories = categories;
+          this.initProducts();
+        });
+  
+    }
+  }
+
+  async getPartnerUserId() {
+    await this.partnerService.getPartnerUserId(this.user.id).subscribe((partner: any) => {
+      this.partner = partner;
+      this.partnerId = this.partner.id;
+      this.partnerName = this.partner.firstname;
+      this.categoryService.getCategories().subscribe((categories: Array<Category>) => {
+          this.categories = categories;
+          this.initProducts();
+        });
+    }, (err) => {
+      this.alertService.confirm({title: err.status, message: err.error})
+      .subscribe((result) => {
+        this.loader.close();
       });
+    });
+  }
+
+  async getPartner(partnerId: any) {
+    await this.partnerService.getPartner(partnerId).subscribe((partner: any) => {
+      this.partner = partner;
+      this.partnerId = this.partner.id;
+      this.partnerName = this.partner.firstname;
+    }, (err) => {
+      this.alertService.confirm({title: err.status, message: err.error})
+      .subscribe((result) => {
+        this.loader.close();
+      });
+    });
   }
 
   async viewMap() {
@@ -164,7 +226,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
     }
   }
 
-  init() {
+  initProducts() {
     let categories = [];
     for (let entry of this.categories) {
       categories.push(entry.name)
@@ -182,8 +244,6 @@ export class ProductsComponent implements OnInit, OnDestroy {
           return products;
         })
       );
-
-
     this.getCart();
     this.cartData = this.shopService.cartData;
   }
@@ -235,6 +295,6 @@ export class ProductsComponent implements OnInit, OnDestroy {
   }
 
   openShop(id) {
-    this.router.navigateByUrl('/shop/'+id);
+    this.router.navigateByUrl('/shop/partner/'+id);
   }
 }

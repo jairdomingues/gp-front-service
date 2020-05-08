@@ -2,7 +2,8 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { MediaChange, MediaObserver } from "@angular/flex-layout";
-import { MatSidenav, MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSidenav } from '@angular/material/sidenav';
 
 import { AppInboxService } from './app-inbox.service';
 import { MailComposeComponent } from './mail-compose.component';

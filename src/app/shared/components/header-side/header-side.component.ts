@@ -46,7 +46,7 @@ export class HeaderSideComponent implements OnInit {
 
     this.isLoggedIn = !!this.tokenStorageService.getToken();
     this.user = this.tokenStorageService.getUser();
-    this.role = this.user.roles[0];
+    this.role = this.user!=null?this.user.roles[0]:null;
     this.egretThemes = this.themeService.egretThemes;
     this.layoutConf = this.layout.layoutConf;
     this.translate.use(this.currentLang.code);
@@ -96,18 +96,19 @@ export class HeaderSideComponent implements OnInit {
 
   async logout() {
     this.tokenStorageService.signOut();
-    if (this.role==='ROLE_PARTNER') {
-      this.router.navigateByUrl('/sessions/signin2')
-    } else {
       this.reloadComponent();
-//      window.location.reload();
-    }
+      // window.location.reload();
   }
 
   reloadComponent() {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.router.onSameUrlNavigation = 'reload';
-    this.router.navigate(['/shop']); 
+
+    if (this.role==='ROLE_PARTNER') {
+      this.router.navigateByUrl('/sessions/signin2')
+    } else {
+      window.location.reload(); 
+    }
   }
 
 }

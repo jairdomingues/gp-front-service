@@ -66,21 +66,11 @@
     <img src="assets/images/greenpay/128x128_G_FundoBranco.png" alt=""/>
   </button> 
 
-  <mat-menu #accountMenu="matMenu" >
+  <mat-menu #accountMenu="matMenu">
     <button mat-menu-item [routerLink]="['/profile/overview']" *ngIf="isLoggedIn">
       <mat-icon>account_box</mat-icon> 
       <span>Profile</span>
     </button>
-    <button mat-menu-item [routerLink]="['/shop']" *ngIf="isLoggedIn">
-      <mat-icon>store</mat-icon>  
-      <span>Shop</span>
-    </button>
-<!--
-    <button mat-menu-item *ngIf="isLoggedIn">
-      <mat-icon>notifications_off</mat-icon>
-      <span>Disable alerts</span>
-    </button>
--->    
     <button mat-menu-item (click)="logout()" *ngIf="isLoggedIn">
       <mat-icon>exit_to_app</mat-icon>
       <span>Sign out</span>

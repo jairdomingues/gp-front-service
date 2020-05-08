@@ -1,6 +1,6 @@
 <div >
   <mat-sidenav-container >
-    <mat-sidenav *ngIf="visible" EgretSideNavToggle class="shop-sidebar default-light-bg">
+    <mat-sidenav EgretSideNavToggle class="shop-sidebar default-light-bg">
       <div class="shop-filters-wrap">
         <form [formGroup]="filterForm">
           <mat-accordion multi="true" displayMode="flat">
@@ -54,10 +54,10 @@
       <div class="full-width">
         <div class="content-card default-bg">
         <mat-tab-group >
-          <mat-tab label="Loja">
+          <mat-tab label="Loja {{partnerName}}"> 
           <!-- Search Form -->
           <div fxLayout="row" fxLayout.lt-sm="column" class="shop-top-toolbar">
-            <button *ngIf="visible" mat-icon-button class="mr-1" (click)="toggleSideNav()"><mat-icon>short_text</mat-icon> </button>
+            <button mat-icon-button class="mr-1" (click)="toggleSideNav()"><mat-icon>short_text</mat-icon> </button>
             <div class="product-search-wrap">
               <form [formGroup]="filterForm">
                 <input type="text" name="searchProduct" placeholder="Procurar produto" class="product-search default-bg full-width" [formControl]="filterForm.controls['search']">
@@ -95,8 +95,8 @@
                 </div>
                 <div class="info-wrap p-1">
                   <div class="main-info">
-                    <h3 class="title" [routerLink]="['/shop/products/', product._id]">{{product.name}}</h3>
-                    <p class="text-muted p-line">{{product?.subtitle}}</p>
+                    <h3 class="title" [routerLink]="['/shop/products/', product.id]">{{product.name}}</h3>
+                    <p class="text-muted p-line">{{product?.partnerId}} - {{product?.partnerName}}</p>
                     <p class="text-muted p-line">
                       <strong>Category:</strong> {{product?.category}}</p>
                     <p class="text-muted p-line">

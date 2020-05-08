@@ -1,4 +1,4 @@
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
 import { DataDialogOverviewComponent } from './data-dialog-overview/data-dialog-overview.component';
 

@@ -3,6 +3,7 @@ import { ProductsComponent } from './products/products.component';
 import { ProductDetailsComponent } from './product-details/product-details.component';
 import { CartComponent } from './cart/cart.component';
 import { CheckoutComponent } from './checkout/checkout.component';
+import { ServiceCartComponent } from './service-cart/service-cart.component';
 
 export const ShopRoutes: Routes = [{
   path: '',
@@ -17,6 +18,10 @@ export const ShopRoutes: Routes = [{
     path: 'cart',
     component: CartComponent,
     data: { title: 'Cart', breadcrumb: 'CART' }
+  }, {
+    path: 'service/cart',
+    component: ServiceCartComponent,
+    data: { title: 'Service Cart', breadcrumb: 'SERVICE CART' }
   }, {
     path: 'checkout',
     component: CheckoutComponent,

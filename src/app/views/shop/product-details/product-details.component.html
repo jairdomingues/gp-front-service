@@ -29,6 +29,7 @@
 <!--     <p class="text-muted p-line"><strong>Tags:</strong> <span *ngFor="let t of product.tags"><span class="mat-color-default">{{t.text}}</span> </span></p>  -->
     </div>
     <div class="product-options">
+      <!--
       <div class="opt-radio mb-1">
         <label class="option-label text-muted">Choose an option: </label>
         <mat-radio-group fxLayout="column" fxLayoutGap="5px">
@@ -37,6 +38,7 @@
           <mat-radio-button  [value]="'opt3'">Option 3</mat-radio-button>
         </mat-radio-group>
       </div>
+      -->
       <div class="opt-quantity mb-1">
         <label class="option-label text-muted" for="quantity">Quantity: </label>
         <input class="quantity-input default-bg" id="quantity" name="quantity" type="number" [(ngModel)]="quantity">

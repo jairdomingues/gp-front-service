@@ -19,6 +19,8 @@ export class Product {
   public photo?: string;
   public gallery?: string[];
   public badge?: { text: string, color?: string };
+  public partnerId: number;
+  public partnerName: string;
 
   constructor(product: any = {}) {
     this._id = product.id;

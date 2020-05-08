@@ -1,0 +1,69 @@
+<div class="margin-333">
+  <form [formGroup]="itemForm">
+    <table class="cart-table default-bg mat-elevation-z1" 
+      [@animate]="{value:'*',params:{delay: '100ms', x:'-50px'}}">
+      <thead>
+        <tr>
+          <th class="text-muted">Service</th>
+          <th class="text-muted">Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span >
+            <mat-form-field>
+              <input
+                formControlName="name"
+                [formControl]="itemForm.controls['name']"
+                matInput
+                placeholder="Service Name"
+                #name
+                required
+              />
+            </mat-form-field>
+          </span></td>
+          <td>
+            <mat-form-field>
+              <input
+                formControlName="price"
+                [formControl]="itemForm.controls['price']"
+                matInput
+                placeholder="Price"
+                #price
+                required
+              />
+            </mat-form-field>
+
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div fxLayout="row" fxLayout.lt-md="column" [@animate]="{value:'*',params:{delay: '100ms', x:'50px'}}">
+      <div fxFlex></div>
+      <div fxFlex="25">
+        <mat-card class="m-0">
+          <div class="line mb-1">
+            <span class="fw-500">Subtotal:</span>
+            <span fxFlex></span>
+            <span class="text-muted">${{subTotal}}</span>
+          </div>
+          <mat-divider class=""></mat-divider>
+          <div class="line mb-1 pt-1">
+            <span class="fw-500">Total:</span>
+            <span fxFlex></span>
+            <span class="text-muted">${{total}}</span>
+          </div>
+          <mat-card-actions>
+            <span fxFlex></span>
+            <button mat-raised-button color="primary" routerLink="/shop">Back To Shop</button>
+            <button mat-raised-button color="warn" (click)="addToCart()">Checkout</button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
+
+
+  </form>
+    
+</div>
